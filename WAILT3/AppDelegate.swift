@@ -13,6 +13,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 	let stv = ScrollingTextView()
+	let handler = UpdateHandler()
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
@@ -24,8 +25,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		statusItem.highlightMode = true
 		
 		stv.statusItem = statusItem
-		stv.setText("short", animated: false)
-		stv.setText("Second thing is long", animated: true)
+		stv.setText("Nothing playing", animated: false)
+		
+		handler.scrollingTextView = stv
+		handler.start()
 	}
 	
 	func constructMenu(_ sources: [String]) {

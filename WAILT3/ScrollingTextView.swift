@@ -20,7 +20,7 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 	var gapWidth: CGFloat = 10
 	var marginWidth: CGFloat = 5
 	
-	var maxWidth: CGFloat = 100
+	var maxWidth: CGFloat = 112
 	
 	
 	// MARK: - Private Variables -
@@ -54,6 +54,13 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 	// MARK: - Set Text -
 	
 	func setText(_ s: String, animated: Bool = true) {
+		if nextText == nil && mainText == s {
+			return
+		}
+		if nextText != nil && nextText == s {
+			return
+		}
+		
 		if animated {
 			nextText = s
 			startTimer()
@@ -78,7 +85,9 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 	private var timer: Timer?
 	
 	func startTimer() {
-		timer ?= Timer.scheduledTimer(withTimeInterval: 1/60, repeats: true, block: onTimer(_:))
+		guard timer == nil else { return }
+		timer = Timer(timeInterval: 1/60, repeats: true, block: onTimer(_:))
+		RunLoop.main.add(timer!, forMode: .commonModes)
 	}
 	func stopTimer() {
 		timer?.invalidate()
@@ -105,6 +114,7 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 				
 				if abs(targetWidth - self.frame.size.width) <= sizeStep {
 					self.frame.size.width = targetWidth
+					targetWidth = self.frame.size.width
 					resizing = false
 				}
 			}
