@@ -18,9 +18,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		// Insert code here to initialize your application
 		StorageHandler.shared.autoPrune()
 		
+		constructMenu([])
+		
 		statusItem.view = stv
+		statusItem.highlightMode = true
+		
+		stv.statusItem = statusItem
 		stv.setText("short", animated: false)
 		stv.setText("Second thing is long", animated: true)
+	}
+	
+	func constructMenu(_ sources: [String]) {
+		let menu = NSMenu()
+		
+		for s in sources {
+			menu.addItem(withTitle: s, action: nil, keyEquivalent: "")
+		}
+		menu.addItem(NSMenuItem.separator())
+		menu.addItem(withTitle: "Quit WAILT", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+		
+		statusItem.menu = menu
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {

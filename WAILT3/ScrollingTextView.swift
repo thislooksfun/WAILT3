@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ScrollingTextView: NSView {
+class ScrollingTextView: NSView, NSMenuDelegate {
 	
 	// MARK: - Settings -
 	
@@ -146,10 +146,44 @@ class ScrollingTextView: NSView {
 	}
 	
 	
+	// MARK: - NSMenuDelegate -
+	
+	private var menuIsShowing = false
+	var statusItem: NSStatusItem?
+	
+	func menuWillOpen(_ menu: NSMenu) {
+		menuIsShowing = true
+		self.needsDisplay = true
+	}
+	func menuDidClose(_ menu: NSMenu) {
+		menuIsShowing = false
+		self.needsDisplay = true
+	}
+	
+	
+	// MARK: - Click Handling -
+	
+	override func mouseDown(with event: NSEvent) {
+		guard let st = statusItem else { return }
+		guard let m = st.menu else { return }
+		m.delegate = self
+		st.popUpMenu(m)
+		self.needsDisplay = true
+	}
+	override func rightMouseDown(with event: NSEvent) {
+		mouseDown(with: event)
+	}
+	
+	
 	// MARK: - Rendering -
 	
 	override func draw(_ dirtyRect: NSRect) {
 		super.draw(dirtyRect)
+		
+		if menuIsShowing {
+			NSColor.selectedMenuItemColor.setFill()
+			dirtyRect.fill()
+		}
 		
 		draw(string: mainText, withOffset: mainTextOffset)
 		if scrolling {
@@ -159,6 +193,8 @@ class ScrollingTextView: NSView {
 	
 	func draw(string s: String, withOffset os: CGFloat) {
 		let point = NSPoint(x: os, y: 3)  // magic 3 ; TODO: make dynamic?
-		NSString(string: s).draw(at: point, withAttributes: [.font: font, .foregroundColor: textColor])
+		
+		let tc = menuIsShowing ? NSColor.selectedMenuItemTextColor : NSColor.textColor
+		NSString(string: s).draw(at: point, withAttributes: [.font: font, .foregroundColor: tc])
 	}
 }
