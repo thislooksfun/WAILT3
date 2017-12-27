@@ -19,8 +19,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		StorageHandler.shared.autoPrune()
 		
 		statusItem.view = stv
-		stv.frame.size.width = 1
-		stv.needsDisplay = true
+		stv.setText("short", animated: false)
+		stv.setText("Second thing is long", animated: true)
 	}
 
 	func applicationWillTerminate(_ aNotification: Notification) {

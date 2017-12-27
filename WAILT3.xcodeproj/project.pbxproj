@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F41076F11FF00F2D0074E6D7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41076F01FF00F2D0074E6D7 /* AppDelegate.swift */; };
-		F41076F31FF00F2D0074E6D7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41076F21FF00F2D0074E6D7 /* ViewController.swift */; };
 		F41076F51FF00F2D0074E6D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F41076F41FF00F2D0074E6D7 /* Assets.xcassets */; };
 		F41076F81FF00F2D0074E6D7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F41076F61FF00F2D0074E6D7 /* Main.storyboard */; };
 		F41077041FF00F2D0074E6D7 /* WAILT3Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41077031FF00F2D0074E6D7 /* WAILT3Tests.swift */; };
@@ -69,7 +68,6 @@
 /* Begin PBXFileReference section */
 		F41076ED1FF00F2D0074E6D7 /* WAILT3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WAILT3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41076F01FF00F2D0074E6D7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F41076F21FF00F2D0074E6D7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F41076F41FF00F2D0074E6D7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F41076F71FF00F2D0074E6D7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F41076F91FF00F2D0074E6D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 			children = (
 				F41076F01FF00F2D0074E6D7 /* AppDelegate.swift */,
 				F474A7681FF3417B002CFDD7 /* ScrollingTextView.swift */,
-				F41076F21FF00F2D0074E6D7 /* ViewController.swift */,
 				F41076F41FF00F2D0074E6D7 /* Assets.xcassets */,
 				F41076F61FF00F2D0074E6D7 /* Main.storyboard */,
 				F41076F91FF00F2D0074E6D7 /* Info.plist */,
@@ -390,7 +387,6 @@
 			files = (
 				F474A75F1FF2080F002CFDD7 /* Player.swift in Sources */,
 				F474A7691FF3417B002CFDD7 /* ScrollingTextView.swift in Sources */,
-				F41076F31FF00F2D0074E6D7 /* ViewController.swift in Sources */,
 				F474A7621FF2158C002CFDD7 /* Helper.swift in Sources */,
 				F41076F11FF00F2D0074E6D7 /* AppDelegate.swift in Sources */,
 				F474A75C1FF206AF002CFDD7 /* StorageHandler.swift in Sources */,
