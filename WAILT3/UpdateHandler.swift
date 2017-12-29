@@ -6,25 +6,49 @@
 //  Copyright © 2017 thislooksfun. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 class UpdateHandler {
 	
-	var playerInfoView: PlayerInfoView?
+	let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+	let playerInfoView = PlayerInfoView()
 	
 	func start() {
 		StorageHandler.shared.addObserver(onChange(_:))
+		
+		StorageHandler.shared.autoPrune()
+		
+		constructMenu([])
+		
+		statusItem.view = playerInfoView
+		statusItem.highlightMode = true
+		
+		playerInfoView.statusItem = statusItem
+		playerInfoView.setPlayer(.nothingPlaying)
 	}
 	
 	func onChange(_ players: [Player]) {
-		guard let piv = playerInfoView else { return }
-		
 		if players.count == 0 {
-			piv.setPlayer(.nothingPlaying)
+			playerInfoView.setPlayer(.nothingPlaying)
 		} else if players.count == 1 {
-			piv.setPlayer(players.first!)
+			playerInfoView.setPlayer(players.first!)
 		} else {
-			piv.setPlayer(.multipleSources(players.count))
+			playerInfoView.setPlayer(.multipleSources(players.count))
 		}
+		
+		constructMenu(players)
+	}
+	
+	func constructMenu(_ sources: [Player]) {
+		let menu = NSMenu()
+		
+		for s in sources {
+			//TODO: Limit length of title?
+			menu.addItem(withTitle: s.title, action: nil, keyEquivalent: "")
+		}
+		menu.addItem(NSMenuItem.separator())
+		menu.addItem(withTitle: "Quit WAILT", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+		
+		statusItem.menu = menu
 	}
 }
