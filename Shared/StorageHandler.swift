@@ -12,7 +12,7 @@ class StorageHandler {
 	
 	static let shared = StorageHandler()
 	
-	private var observers: [([String: Player]) -> Void] = []
+	private var observers: [([Player]) -> Void] = []
 	private(set) var players: [String: Player] = [:]
 	
 	private var observer: NSKeyValueObservation!
@@ -38,7 +38,8 @@ class StorageHandler {
 		}
 		setPlayersFromDictArr(dictArr)
 		
-		observers.all(players)
+		let flatPlayers = players.flatMap { $0.value }
+		observers.all(flatPlayers)
 	}
 	
 	func setPlayersFromDictArr(_ da: [[String: Any]]) {
@@ -65,9 +66,15 @@ class StorageHandler {
 		save()
 	}
 	
-	func addObserver(_ closure: @escaping ([String: Player]) -> Void) {
+	func removePlayer(_ p: Player) {
+		players.removeValue(forKey: p.uid)
+		save()
+	}
+	
+	func addObserver(_ closure: @escaping ([Player]) -> Void) {
 		observers.append(closure)
-		closure(players)
+		let flatPlayers = players.flatMap { $0.value }
+		closure(flatPlayers)
 	}
 	
 	func autoPrune() {
@@ -78,7 +85,7 @@ class StorageHandler {
 	
 	func prune() {
 		let before = players.count
-		players = players.filter { (e) in e.value.lastUpdated.timeIntervalToNow < 5 }
+		players = players.filter { (e) in e.value.lastUpdated.timeIntervalToNow < 1 }
 		if before != players.count {
 			save()  // Only save if something actually changed.
 		}

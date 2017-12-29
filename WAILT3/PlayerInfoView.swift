@@ -8,33 +8,25 @@
 
 import Cocoa
 
-class ScrollingTextView: NSView, NSMenuDelegate {
+class PlayerInfoView: NSView, NSMenuDelegate {
 	
 	// MARK: - Settings -
 	
-	var textColor: NSColor = .black
-	
-	var lastScrollEnd = Date()
-	
 	var timeBetweenScrolls: TimeInterval = 3
-	var gapWidth: CGFloat = 10
+	var gapWidth: CGFloat = 20
 	var marginWidth: CGFloat = 5
 	
-	var maxWidth: CGFloat = 112
+	var maxWidth: CGFloat = 300 {
+		didSet { sizeToFit() }
+	}
 	
 	
 	// MARK: - Private Variables -
 	
-	private var mainText = ""
-	private var secondText = ""
-	private var nextText: String?
-	
+	private var player = Player.blank
 	private var mainTextOffset: CGFloat = 0
-	private var targetWidth: CGFloat = 0
-	
 	private var scrolling = false
-	private var resizing = false
-	
+	private var lastScrollEnd = Date()
 	private let font = NSFont.systemFont(ofSize: 14)
 	
 	
@@ -44,39 +36,35 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 		return maxWidth - marginWidth*2
 	}
 	private var willScroll: Bool {
-		return width(of: mainText) > effectiveMaxWidth
+		return width(of: player) > effectiveMaxWidth
 	}
 	private var secondTextOffset: CGFloat {
-		return mainTextOffset + gapWidth + width(of: mainText)
+		return mainTextOffset + gapWidth + width(of: player.title)
 	}
 	
 	
-	// MARK: - Set Text -
+	// MARK: - Set Player -
 	
-	func setText(_ s: String, animated: Bool = true) {
-		if nextText == nil && mainText == s {
-			return
-		}
-		if nextText != nil && nextText == s {
-			return
+	func setPlayer(_ p: Player) {
+		print("setPlayer(\(p))")
+		
+		let titleChanged = p.title != player.title
+		
+		if p == player {
+			if p.lastUpdated > player.lastUpdated {
+				player = p
+			}
+		} else {
+			player = p
 		}
 		
-		if animated {
-			nextText = s
-			startTimer()
-		} else {
-			mainText = s
+		if titleChanged {
 			mainTextOffset = marginWidth
 			scrolling = false
-			
-			if willScroll {
-				startTimer()
-			} else {
-				stopTimer()
-			}
+			lastScrollEnd = Date()
 		}
 		
-		self.sizeToFit(s, animated: animated)
+		sizeToFit()
 		self.needsDisplay = true
 	}
 	
@@ -95,44 +83,24 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 	}
 	
 	func onTimer(_ t: Timer) {
-		guard willScroll || nextText != nil else {
+		guard willScroll else {
 			mainTextOffset = marginWidth
 			return
 		}
 		
 		if scrolling {
 			mainTextOffset -= 0.5
-			if resizing {
-				let sizeStep: CGFloat = 1
-				if targetWidth > self.frame.size.width {
-					self.frame.size.width += sizeStep
-					mainTextOffset += sizeStep
-				} else {
-					self.frame.size.width -= sizeStep
-					mainTextOffset -= sizeStep
-				}
-				
-				if abs(targetWidth - self.frame.size.width) <= sizeStep {
-					self.frame.size.width = targetWidth
-					targetWidth = self.frame.size.width
-					resizing = false
-				}
-			}
 			if secondTextOffset <= marginWidth {
 				// Scrolling finished
 				lastScrollEnd = Date()
 				mainTextOffset = marginWidth
-				mainText = secondText
-				nextText = nil
 				scrolling = false
 			}
 			
 			self.needsDisplay = true
 		} else {
-			if lastScrollEnd.timeIntervalToNow > timeBetweenScrolls || nextText != nil {
-				secondText = nextText ?? mainText
+			if lastScrollEnd.timeIntervalToNow > timeBetweenScrolls {
 				scrolling = true
-				resizing = targetWidth != self.frame.size.width
 				self.needsDisplay = true
 			}
 		}
@@ -147,11 +115,18 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 	private func width(of s: String) -> CGFloat {
 		return NSString(string: s).size(withAttributes: [.font: font]).width
 	}
+	private func width(of p: Player) -> CGFloat {
+		if p.hidesTime { return width(of: p.title) }
+		return width(of: p.title) + marginWidth + width(of: p.progressString)
+	}
 	
-	func sizeToFit(_ text: String, animated: Bool) {
-		targetWidth = min(effectiveMaxWidth, width(of: text)) + marginWidth*2
-		if !animated {
-			self.frame.size.width = targetWidth
+	func sizeToFit() {
+		self.frame.size.width = min(effectiveMaxWidth, width(of: player)) + marginWidth*2
+		
+		if willScroll {
+			startTimer()
+		} else {
+			stopTimer()
 		}
 	}
 	
@@ -195,14 +170,53 @@ class ScrollingTextView: NSView, NSMenuDelegate {
 			dirtyRect.fill()
 		}
 		
-		draw(string: mainText, withOffset: mainTextOffset)
-		if scrolling {
-			draw(string: secondText, withOffset: secondTextOffset)
+		if player.hidesTime {
+			drawTitle(in: dirtyRect, withTimeWidth: 0)
+		} else {
+			let timeWidth = drawTime(in: dirtyRect)
+			drawTitle(in: dirtyRect, withTimeWidth: timeWidth)
 		}
 	}
 	
-	func draw(string s: String, withOffset os: CGFloat) {
-		let point = NSPoint(x: os, y: 3)  // magic 3 ; TODO: make dynamic?
+	
+	// Returns the bounds taken up by the time string
+	func drawTime(in r: NSRect) -> CGFloat {
+		let timeString = player.progressString
+		
+		// Calculate bounds for time
+		let timeWidth = width(of: timeString) + marginWidth*2
+		let origin = NSPoint(x: r.origin.x + r.width - timeWidth, y: r.origin.y)
+		let size = NSSize(width: timeWidth, height: r.height)
+		let timeRect = NSRect(origin: origin, size: size)
+		
+		// Draw
+		draw(string: timeString, withOffset: marginWidth, inRect: timeRect)
+		
+		return timeWidth
+	}
+	
+	
+	func drawTitle(in r: NSRect, withTimeWidth tw: CGFloat) {
+		// Calculate bounds for title
+		let origin = r.origin
+		let size = NSSize(width: r.width - tw, height: r.height)
+		let titleRect = NSRect(origin: origin, size: size)
+		
+		// Draw title
+		draw(string: player.title, withOffset: mainTextOffset, inRect: titleRect)
+		if scrolling {
+			draw(string: player.title, withOffset: secondTextOffset, inRect: titleRect)
+		}
+	}
+	
+	
+	func draw(string s: String, withOffset os: CGFloat, inRect r: NSRect) {
+		let point = NSPoint(x: os + r.origin.x, y: 3)  // magic 3 ; TODO: make dynamic?
+		
+		NSGraphicsContext.current?.saveGraphicsState()
+		defer { NSGraphicsContext.current?.restoreGraphicsState() }
+		
+		r.clip()
 		
 		let tc = menuIsShowing ? NSColor.selectedMenuItemTextColor : NSColor.textColor
 		NSString(string: s).draw(at: point, withAttributes: [.font: font, .foregroundColor: tc])

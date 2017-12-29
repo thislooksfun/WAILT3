@@ -12,7 +12,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-	let stv = ScrollingTextView()
+	let piv = PlayerInfoView()
 	let handler = UpdateHandler()
 	
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -21,13 +21,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		
 		constructMenu([])
 		
-		statusItem.view = stv
+		statusItem.view = piv
 		statusItem.highlightMode = true
 		
-		stv.statusItem = statusItem
-		stv.setText("Nothing playing", animated: false)
+		piv.statusItem = statusItem
+		piv.setPlayer(.nothingPlaying)
 		
-		handler.scrollingTextView = stv
+		handler.playerInfoView = piv
 		handler.start()
 	}
 	

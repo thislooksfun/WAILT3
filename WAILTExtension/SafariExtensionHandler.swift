@@ -21,6 +21,18 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
 		}
 		
 		print("\(Date().timeIntervalSince1970) -- \(messageName) -- \(p)")
-		StorageHandler.shared.addPlayer(p)
+		
+		switch messageName {
+		case "timeUpdate",
+			 "play",
+			 "play.buffer":
+			StorageHandler.shared.addPlayer(p)
+		case "ended",
+			 "pause",
+			 "pause.buffer":
+			StorageHandler.shared.removePlayer(p)
+		default:
+			print("Unknown message '\(messageName)'")
+		}
 	}
 }

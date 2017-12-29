@@ -22,6 +22,22 @@ extension Date {
 	}
 }
 
+extension TimeInterval {
+	var asTimeStr: String {
+		if isNaN {
+			return "NaN"
+		}
+		
+		let hours = Int(self / (60 * 60))
+		let minutes = Int((self / 60).truncatingRemainder(dividingBy: 60))
+		let seconds = Int(self.truncatingRemainder(dividingBy: 60))
+		
+		if hours > 0 {
+			return String(format: "%i:%02i:%02i", hours, minutes, seconds)
+		}
+		return String(format: "%i:%02i", minutes, seconds)
+	}
+}
 
 // MARK: - Operators
 

@@ -23,8 +23,7 @@
 		F474A7621FF2158C002CFDD7 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474A7611FF2158C002CFDD7 /* Helper.swift */; };
 		F474A7631FF2158C002CFDD7 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474A7611FF2158C002CFDD7 /* Helper.swift */; };
 		F474A7671FF2E564002CFDD7 /* youtube.js in Resources */ = {isa = PBXBuildFile; fileRef = F474A7651FF2E564002CFDD7 /* youtube.js */; };
-		F474A7691FF3417B002CFDD7 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474A7681FF3417B002CFDD7 /* ScrollingTextView.swift */; };
-		F474A76A1FF3417B002CFDD7 /* ScrollingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474A7681FF3417B002CFDD7 /* ScrollingTextView.swift */; };
+		F474A7691FF3417B002CFDD7 /* PlayerInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474A7681FF3417B002CFDD7 /* PlayerInfoView.swift */; };
 		F474A76E1FF4539E002CFDD7 /* UpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F474A76D1FF4539E002CFDD7 /* UpdateHandler.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,7 +88,7 @@
 		F474A75E1FF2080F002CFDD7 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		F474A7611FF2158C002CFDD7 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		F474A7651FF2E564002CFDD7 /* youtube.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = youtube.js; sourceTree = "<group>"; };
-		F474A7681FF3417B002CFDD7 /* ScrollingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingTextView.swift; sourceTree = "<group>"; };
+		F474A7681FF3417B002CFDD7 /* PlayerInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerInfoView.swift; sourceTree = "<group>"; };
 		F474A76D1FF4539E002CFDD7 /* UpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,7 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				F41076F01FF00F2D0074E6D7 /* AppDelegate.swift */,
-				F474A7681FF3417B002CFDD7 /* ScrollingTextView.swift */,
+				F474A7681FF3417B002CFDD7 /* PlayerInfoView.swift */,
 				F474A76D1FF4539E002CFDD7 /* UpdateHandler.swift */,
 				F41076F41FF00F2D0074E6D7 /* Assets.xcassets */,
 				F41076F61FF00F2D0074E6D7 /* Main.storyboard */,
@@ -390,7 +389,7 @@
 			files = (
 				F474A75F1FF2080F002CFDD7 /* Player.swift in Sources */,
 				F474A76E1FF4539E002CFDD7 /* UpdateHandler.swift in Sources */,
-				F474A7691FF3417B002CFDD7 /* ScrollingTextView.swift in Sources */,
+				F474A7691FF3417B002CFDD7 /* PlayerInfoView.swift in Sources */,
 				F474A7621FF2158C002CFDD7 /* Helper.swift in Sources */,
 				F41076F11FF00F2D0074E6D7 /* AppDelegate.swift in Sources */,
 				F474A75C1FF206AF002CFDD7 /* StorageHandler.swift in Sources */,
@@ -420,7 +419,6 @@
 				F474A75D1FF206AF002CFDD7 /* StorageHandler.swift in Sources */,
 				F474A7601FF2080F002CFDD7 /* Player.swift in Sources */,
 				F41077461FF0266F0074E6D7 /* SafariExtensionHandler.swift in Sources */,
-				F474A76A1FF3417B002CFDD7 /* ScrollingTextView.swift in Sources */,
 				F474A7631FF2158C002CFDD7 /* Helper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

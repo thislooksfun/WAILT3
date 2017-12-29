@@ -10,21 +10,21 @@ import Foundation
 
 class UpdateHandler {
 	
-	var scrollingTextView: ScrollingTextView?
+	var playerInfoView: PlayerInfoView?
 	
 	func start() {
 		StorageHandler.shared.addObserver(onChange(_:))
 	}
 	
-	func onChange(_ players: [String: Player]) {
-		guard let stv = scrollingTextView else { return }
+	func onChange(_ players: [Player]) {
+		guard let piv = playerInfoView else { return }
 		
 		if players.count == 0 {
-			stv.setText("Nothing playing")
+			piv.setPlayer(.nothingPlaying)
 		} else if players.count == 1 {
-			stv.setText(players.first!.value.title)
+			piv.setPlayer(players.first!)
 		} else {
-			stv.setText("\(players.count) sources")
+			piv.setPlayer(.multipleSources(players.count))
 		}
 	}
 }
